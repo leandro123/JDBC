@@ -1,0 +1,29 @@
+CREATE TABLE cliente
+(
+  id_cliente serial NOT NULL,
+  nome character varying(30) NOT NULL,
+  categ smallint NOT NULL,
+  CONSTRAINT cliente_pkey PRIMARY KEY (id_cliente ),
+  CONSTRAINT cliente_categ_check CHECK (categ = ANY (ARRAY[1, 2, 3])),
+  CONSTRAINT cliente_nome_check CHECK (btrim(nome::text) <> ''::text)
+)
+WITH (
+  OIDS=FALSE
+);
+
+CREATE TABLE servicos
+(
+
+  id_servico serial NOT NULL,
+  descricao character varying(30),
+  valor numeric(9,2) DEFAULT 0.01,
+  valor_desconto numeric(9,2),
+  CONSTRAINT servicos_pkey PRIMARY KEY (id_servico ),
+  CONSTRAINT servicos_valor_check CHECK (valor > 0::numeric),
+  CONSTRAINT servicos_valor_desconto_check CHECK (valor_desconto >= 0::numeric),
+  CONSTRAINT vlr_desconto_valido CHECK (valor >= valor_desconto)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE servicos
